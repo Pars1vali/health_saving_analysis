@@ -3,6 +3,7 @@ import pandas as pd
 import recomendations as rc
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
 tags = [["amenity","cafe",0],
          ["highway","track",0],
@@ -58,7 +59,7 @@ def model_start():
       city = date_cpb
 
     data_city = collecting_date_city(city)
-    df_child = pd.DataFrame([data_city],index=[f'{city[4]}'])
+    df_child = pd.DataFrame([data_city],index=[f'{city[len(city)-1]}'])
     df = df_base._append(df_child)
     print(df)
 
@@ -76,15 +77,21 @@ def model_start():
     importance_df = pd.DataFrame({'Feature': df.columns[:-1], 'Importance': feature_importance})
     importance_df = importance_df.sort_values(by='Importance', ascending=False)
     print(importance_df.head(6))
-    n=3
-    important_fitches = importance_df.iloc[:2,]
-    print(important_fitches.head())
+    
+    important_features = importance_df.iloc[:2,]
+    print(important_features.head())
     text = ""
-    for fitch_index in range(len(important_fitches)):
+    for feature_index in range(len(important_features)):
         for rec_goal in rc.recomedations:
-          if(important_fitches.iloc[fitch_index,0]==rec_goal[0]):
-            text = rec_goal[1]
+          if(important_features.iloc[feature_index,0]==rec_goal[0]):
+            text += str(rec_goal[1])+'<br>'
 
+    plt.figure(figsize=(10, 6))
+    plt.bar(importance_df['Feature'], importance_df['Importance'],color="#87CEFA")
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.title('Feature Importance for Clustering')
+    plt.savefig('important_features.png')
     return text
 
 def collecting_date_city(city):

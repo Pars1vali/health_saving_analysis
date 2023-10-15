@@ -145,8 +145,13 @@ def index():
                         url: '/query_overpass',
                         type: 'POST',
                         success: function(response){
+                            var coordinatesDiv = document.querySelector('.leaflet-control-coordinates');
                             console.log(response);
-                        },
+                            var imageElement = document.createElement('img');
+                            imageElement.src = './important_features.png';
+                            imageElement.alt = 'Описание изображения';
+                            coordinatesDiv.innerHTML = 'Рекомендации:<br>' + response.toString();
+                                  },
                         error: function(error){
                             console.log(error);
                         }
