@@ -1,6 +1,6 @@
 import overpy
-from numpy import square
 import pandas as pd
+import recomendations as rc
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
@@ -67,15 +67,25 @@ def model_start():
     X = df[features]
 
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    x_scaled = scaler.fit_transform(X)
 
     kmeans = KMeans(n_clusters=3)
-    df['Cluster'] = kmeans.fit_predict(X_scaled)
+    df['Cluster'] = kmeans.fit_predict(x_scaled)
     feature_importance = kmeans.cluster_centers_.mean(axis=0)
 
     importance_df = pd.DataFrame({'Feature': df.columns[:-1], 'Importance': feature_importance})
     importance_df = importance_df.sort_values(by='Importance', ascending=False)
-    print(importance_df.head())
+    print(importance_df.head(6))
+    n=3
+    important_fitches = importance_df.iloc[:2,]
+    print(important_fitches.head())
+    text = ""
+    for fitch_index in range(len(important_fitches)):
+        for rec_goal in rc.recomedations:
+          if(important_fitches.iloc[fitch_index,0]==rec_goal[0]):
+            text = rec_goal[1]
+
+    return text
 
 def collecting_date_city(city):
   api = overpy.Overpass()

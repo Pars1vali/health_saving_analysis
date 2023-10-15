@@ -19,15 +19,15 @@ def index():
             <style>
             body {
                 background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, #d0f0c0 50%),
-                background-position: center, center;  /* позиционирует изображение и градиент по центру */
+                background-position: center, center;  
                 margin: 20px;
             }
 
                 #map {
-                    margin-top: 20px;
+                    margin-top: 5%;
                     margin-left: auto;
                     margin-right: auto;
-                    width: 80%;  /* или другой процент по вашему усмотрению */
+                    width: 80%;  
                     height: 500px;
                 }
 
@@ -39,25 +39,24 @@ def index():
 
                 .button-container {
                     text-align: center;
-                    margin-top: 10px; /* можно увеличить значение для большего отступа сверху */
                 }
 
                 #queryButton {
                     position: relative;
                     left: 50%;
                     transform: translateX(-50%);
-                    background-color: #008CBA; /* Blue color */
+                    background-color: #008CBA; 
                     color: white;
                     padding: 10px 24px;
                     border: none;
                     border-radius: 4px;
                     cursor: pointer;
                     font-size: 16px;
-                    margin-top: 2ф0px
+                    margin-top: 2%;
                 }
 
                 #queryButton:hover {
-                    background-color: #005f5f; /* Darker blue on hover */
+                    background-color: #005f5f; 
                 }
             </style>
         </head>
@@ -65,7 +64,7 @@ def index():
             <div id="map"></div>
             <button id="queryButton">Запрос</button>
             <script>
-                var city = "";  // глобальная переменная для хранения выбранного города
+                var city = "";  
 
                 function setCityVariable(cityName) {
     city = cityName;
@@ -123,7 +122,7 @@ def index():
 
                 coordinatesControl.onAdd = function(map) {
                     var coordinatesDiv = L.DomUtil.create('div', 'leaflet-control-coordinates');
-                    coordinatesDiv.innerHTML = 'Координаты: не выбраны';
+                    coordinatesDiv.innerHTML = 'Город не выбран';
                     return coordinatesDiv;
                 };
 
@@ -147,7 +146,6 @@ def index():
                         type: 'POST',
                         success: function(response){
                             console.log(response);
-                            // Действия с ответом сервера
                         },
                         error: function(error){
                             console.log(error);
@@ -165,13 +163,13 @@ def set_city():
     city_name = request.form['cityName']
     print(f'Выбранный город: {city_name}')
     modal.city_name = city_name
-
     return "City set successfully", 200
 
 @app.route('/query_overpass', methods=['POST'])
 def query_overpass():
-    modal.model_start()   
-    return "Query was successful"
+    text = modal.model_start()
+    print(text)  
+    return str(text)
 
 if __name__ == '__main__':
     app.run(debug=True)
